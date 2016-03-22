@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "enum": "^2.3.0",
     "ffi": "^2.0.0"
   },
   "devDependencies": {

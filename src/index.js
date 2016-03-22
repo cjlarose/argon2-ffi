@@ -1,4 +1,5 @@
 import argon2 from './library';
+import errorCodes from './error_codes';
 
 const defaultOptions = {
   timeCost: 3,
@@ -24,8 +25,11 @@ export const argon2i = {
     const { timeCost, memoryCost, parallelism, hashLength } = hashOptions;
     const hashOutput = new Buffer(hashLength);
     const resultHandler = (err, res) => {
-      if (err) { throw err; }
-      if (res !== 0) { return cb(res, null); }
+      if (err) { return cb(err, null); }
+      if (!errorCodes.ARGON2_OK.is(res)) {
+        const errorMsg = errorCodes.get(res).key;
+        return cb(new Error(errorMsg), null);
+      }
       return cb(null, hashOutput);
     };
     argon2.argon2i_hash_raw.async(timeCost, memoryCost, parallelism,
