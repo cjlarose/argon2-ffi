@@ -1,16 +1,11 @@
-var ffi = require('ffi');
-var ref = require('ref');
+import ffi from 'ffi';
+import ref from 'ref';
+import path from 'path';
 
-var argon2 = ffi.Library(__dirname + '/../build/Release/argon2', {
-  argon2i_hash_raw: ['int', ['uint32', /* t_cost */
-                             'uint32', /* m_cost */
-                             'uint32', /* parallelism */
-                             ref.refType('void'), /* password */
-                             'size_t', /* password length */
-                             ref.refType('void'), /* salt */
-                             'size_t', /* salt length */
-                             ref.refType('void'), /* hash */
-                             'size_t']] /* hash length */
+const dylib = path.join(__dirname, '..', 'build', 'Release', 'argon2');
+export default new ffi.Library(dylib, {
+  argon2i_hash_raw: ['int', ['uint32', 'uint32', 'uint32', // t_cost, m_cost, c
+                             ref.refType('void'), 'size_t', // password
+                             ref.refType('void'), 'size_t', // salt
+                             ref.refType('void'), 'size_t']], // hash output
 });
-
-module.exports = argon2;
