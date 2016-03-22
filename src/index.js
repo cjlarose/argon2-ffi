@@ -27,14 +27,31 @@ const defaultOptions = {
 };
 
 export const argon2i = {
-  hashRaw(password, salt, options = {}) {
+  hashRaw(...args) {
+    let password;
+    let salt;
+    let options = defaultOptions;
+    let cb;
+
+    if (args.length === 3) {
+      [password, salt, cb] = args;
+    } else {
+      [password, salt, options, cb] = args;
+    }
+
     const hashOptions = Object.assign({}, defaultOptions, options);
     const { timeCost, memoryCost, parallelism, hashLength } = hashOptions;
     const hashOutput = new Buffer(hashLength);
-    argon2.argon2i_hash_raw(timeCost, memoryCost, parallelism,
-                            password, password.length,
-                            salt, salt.length,
-                            hashOutput, hashLength);
+    const resultHandler = (err, res) => {
+      if (err) { throw err; }
+      if (res !== 0) { return cb(res, null); }
+      return cb(null, hashOutput);
+    };
+    argon2.argon2i_hash_raw.async(timeCost, memoryCost, parallelism,
+                                  password, password.length,
+                                  salt, salt.length,
+                                  hashOutput, hashLength,
+                                  resultHandler);
     return hashOutput;
   },
 };
