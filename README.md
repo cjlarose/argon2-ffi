@@ -1,7 +1,7 @@
 # argon.js
 
 Node.js bindings for [`argon2`][argon2], the winner of the Password
-Hashing Competition (PHC), and the current recommendation for a
+Hashing Competition (PHC), and the current recommendation for
 password storage by the [Open Web Application Security Project
 (OWASP)][owasp].
 
