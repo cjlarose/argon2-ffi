@@ -1,6 +1,9 @@
 # argon.js
 
-Node.js bindings for argon2
+Node.js bindings for [`argon2`][argon2], the winner of the Password
+Hashing Competition (PHC), and the current recommendation for a
+password storage by the [Open Web Application Security Project
+(OWASP)][owasp].
 
 ## Usage:
 
@@ -8,7 +11,6 @@ This module exports `argon2i` and `argon2d`. These are two variants
 of `argon2` with different use-cases and tradeoffs. To find which
 one you want to use, refer to the [`argon2` repo][argon2]
 
-[argon2]: https://github.com/P-H-C/phc-winner-argon2
 
 ### Hashing a password
 
@@ -46,3 +48,6 @@ To build:
     npm install -g node-gyp
     node-gyp rebuild
     npm run build
+
+[argon2]: https://github.com/P-H-C/phc-winner-argon2
+[owasp]: https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet
