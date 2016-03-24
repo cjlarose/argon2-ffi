@@ -5,7 +5,11 @@ Hashing Competition (PHC), and the current recommendation for
 password storage by the [Open Web Application Security Project
 (OWASP)][owasp].
 
-## Usage:
+## Installation
+
+    npm install --save cjlarose/argon2.js
+
+## Usage
 
 This module exports `argon2i` and `argon2d`. These are two variants
 of `argon2` with different use-cases and tradeoffs. To find which
