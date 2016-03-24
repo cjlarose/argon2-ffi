@@ -62,4 +62,18 @@ describe('argon2i', function () {
       });
     });
   });
+
+  describe('hash', function () {
+    it('should return correct hash', function (done) {
+      var salt = new Buffer('saltsalt');
+      var password = new Buffer('password1');
+      var expectedEncoding = '$argon2i$v=19$m=4096,t=3,p=1' +
+        '$c2FsdHNhbHQ$UXn3cGJT8JATe3QATxY1U0FAWqZXrD7R6bUwEyZ3hEQ';
+      argon2i.hash(password, salt, function (err, res) {
+        assert.ifError(err);
+        assert.equal(res, expectedEncoding);
+        done();
+      });
+    });
+  });
 });

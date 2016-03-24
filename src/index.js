@@ -1,3 +1,4 @@
+import ref from 'ref';
 import argon2 from './library';
 import errorCodes from './error_codes';
 
@@ -43,5 +44,27 @@ export const argon2i = {
                                   hashOutput, hashLength,
                                   resultHandler);
     return hashOutput;
+  },
+
+  hash(...args) {
+    const [password, salt, options, cb] = parseArgs(args);
+    const { timeCost, memoryCost, parallelism, hashLength } = options;
+    const encodedSize = argon2.argon2_encodedlen(timeCost, 1 << memoryCost, parallelism,
+                                                 salt.length, hashLength);
+    const outputBuffer = new Buffer(encodedSize);
+    const resultHandler = (err, res) => {
+      if (err) { return cb(err, null); }
+      if (!errorCodes.ARGON2_OK.is(res)) {
+        const errorMsg = errorCodes.get(res).key;
+        return cb(new Error(errorMsg), null);
+      }
+      return cb(null, ref.readCString(outputBuffer, 0));
+    };
+    argon2.argon2i_hash_encoded.async(timeCost, 1 << memoryCost, parallelism,
+                                      password, password.length,
+                                      salt, salt.length,
+                                      hashLength,
+                                      outputBuffer, outputBuffer.length,
+                                      resultHandler);
   },
 };
