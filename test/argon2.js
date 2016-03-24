@@ -56,6 +56,7 @@ describe('argon2i', function () {
       var options = { parallelism: 2 };
       argon2i.hashRaw(password, salt, options, function (err, hashOutput) {
         assert(err instanceof Error);
+        assert.equal(hashOutput, null);
         assert.equal(err.message, 'ARGON2_MEMORY_TOO_LITTLE');
         done();
       });
