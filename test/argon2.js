@@ -8,10 +8,10 @@ describe('argon2i', function () {
     it('should return correct hash', function (done) {
       var salt = new Buffer('saltsalt');
       var password = new Buffer('password1');
-      var expectedHash = 'bac520e3d5029363ef138be2ca001516cead3cb8a541c66d5fbd6dc51ce2932c';
+      var expectedHash = '5179f7706253f090137b74004f16355341405aa657ac3ed1e9b5301326778444';
       argon2i.hashRaw(password, salt, function (err, hashOutput) {
         assert.ifError(err);
-        assert(hashOutput.equals(new Buffer(expectedHash, 'hex')));
+        assert.equal(hashOutput.toString('hex'), expectedHash);
         done();
       });
     });
@@ -19,10 +19,10 @@ describe('argon2i', function () {
     it('should allow changing timeCost', function (done) {
       var salt = new Buffer('saltsalt');
       var password = new Buffer('password1');
-      var expectedHash = '251da10a21fd0f37b00b9dd35b3764c699c2af837ce38229840c0e3a4b9ebacb';
+      var expectedHash = '188baa8a1acbad59af6d3acfaa8a63b6845e64ac4d95c7be8b29ea9c00e2edcb';
       argon2i.hashRaw(password, salt, { timeCost: 5 }, function (err, hashOutput) {
         assert.ifError(err);
-        assert(hashOutput.equals(new Buffer(expectedHash, 'hex')));
+        assert.equal(hashOutput.toString('hex'), expectedHash);
         done();
       });
     });
@@ -30,10 +30,10 @@ describe('argon2i', function () {
     it('should allow changing memoryCost', function (done) {
       var salt = new Buffer('saltsalt');
       var password = new Buffer('password1');
-      var expectedHash = '8bfcac70948a7928a21e060b898fe7f8c63aa9dc758be3e9ee444ab4078c2662';
+      var expectedHash = 'f7b4b5b0c30976cdf3137281a31a0573e0335723882388320069b58b94793fb7';
       argon2i.hashRaw(password, salt, { memoryCost: 14 }, function (err, hashOutput) {
         assert.ifError(err);
-        assert(hashOutput.equals(new Buffer(expectedHash, 'hex')));
+        assert.equal(hashOutput.toString('hex'), expectedHash);
         done();
       });
     });
@@ -41,11 +41,11 @@ describe('argon2i', function () {
     it('should allow changing parallelism', function (done) {
       var salt = new Buffer('saltsalt');
       var password = new Buffer('password1');
-      var expectedHash = '7cd6e35a8f9e31616f73c13d19414cf321a80da1916881906b07f235916ea716';
+      var expectedHash = '804a7d9ed278d4125e5bfb710972ad105235227215a3f9e7c2cda304f7d4b81d';
       var options = { memoryCost: 16, parallelism: 2 };
       argon2i.hashRaw(password, salt, options, function (err, hashOutput) {
         assert.ifError(err);
-        assert(hashOutput.equals(new Buffer(expectedHash, 'hex')));
+        assert.equal(hashOutput.toString('hex'), expectedHash);
         done();
       });
     });
@@ -53,7 +53,7 @@ describe('argon2i', function () {
     it('should return error codes', function (done) {
       var salt = new Buffer('saltsalt');
       var password = new Buffer('password1');
-      var options = { parallelism: 2 };
+      var options = { timeCost: 2, memoryCost: 0, parallelism: 1 };
       argon2i.hashRaw(password, salt, options, function (err, hashOutput) {
         assert(err instanceof Error);
         assert.equal(hashOutput, null);

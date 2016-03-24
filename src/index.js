@@ -8,21 +8,26 @@ const defaultOptions = {
   hashLength: 32,
 };
 
+function parseArgs(args) {
+  let password;
+  let salt;
+  let options = {};
+  let cb;
+
+  if (args.length === 3) {
+    [password, salt, cb] = args;
+  } else {
+    [password, salt, options, cb] = args;
+  }
+
+  const hashOptions = Object.assign({}, defaultOptions, options);
+  return [password, salt, hashOptions, cb];
+}
+
 export const argon2i = {
   hashRaw(...args) {
-    let password;
-    let salt;
-    let options = defaultOptions;
-    let cb;
-
-    if (args.length === 3) {
-      [password, salt, cb] = args;
-    } else {
-      [password, salt, options, cb] = args;
-    }
-
-    const hashOptions = Object.assign({}, defaultOptions, options);
-    const { timeCost, memoryCost, parallelism, hashLength } = hashOptions;
+    const [password, salt, options, cb] = parseArgs(args);
+    const { timeCost, memoryCost, parallelism, hashLength } = options;
     const hashOutput = new Buffer(hashLength);
     const resultHandler = (err, res) => {
       if (err) { return cb(err, null); }
@@ -32,7 +37,7 @@ export const argon2i = {
       }
       return cb(null, hashOutput);
     };
-    argon2.argon2i_hash_raw.async(timeCost, memoryCost, parallelism,
+    argon2.argon2i_hash_raw.async(timeCost, 1 << memoryCost, parallelism,
                                   password, password.length,
                                   salt, salt.length,
                                   hashOutput, hashLength,
