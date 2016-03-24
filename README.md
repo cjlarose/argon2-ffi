@@ -9,7 +9,7 @@ password storage by the [Open Web Application Security Project
 
 This module exports `argon2i` and `argon2d`. These are two variants
 of `argon2` with different use-cases and tradeoffs. To find which
-one you want to use, refer to the [`argon2` repo][argon2]
+one you should use, refer to the [`argon2` repo][argon2].
 
 
 ### Hashing a password
@@ -41,7 +41,7 @@ argon2i.verify(encodedHash, password, function(err, res) {
 });
 ```
 
-### Contributing
+## Contributing
 
 To build:
 
