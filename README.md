@@ -1,4 +1,4 @@
-# argon.js
+# argon.js [![Build Status](https://travis-ci.org/cjlarose/argon2.js.svg?branch=master)](https://travis-ci.org/cjlarose/argon2.js)
 
 Node.js bindings for [`argon2`][argon2], the winner of the Password
 Hashing Competition (PHC), and the current recommendation for
