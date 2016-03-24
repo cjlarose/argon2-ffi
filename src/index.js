@@ -67,4 +67,16 @@ export const argon2i = {
                                       outputBuffer, outputBuffer.length,
                                       resultHandler);
   },
+
+  verify(encoded, password, cb) {
+    const encodedBuffer = ref.allocCString(encoded);
+    argon2.argon2i_verify.async(encodedBuffer, password, password.length, (err, res) => {
+      if (err) { return cb(err, null); }
+      if (!errorCodes.ARGON2_OK.is(res)) {
+        const errorMsg = errorCodes.get(res).key;
+        return cb(new Error(errorMsg), null);
+      }
+      return cb(null, res);
+    });
+  },
 };
