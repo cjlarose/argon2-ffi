@@ -47,6 +47,10 @@ argon2i.hash(password, salt, options, function(err, res) {
 });
 ```
 
+The result of running `.hash` is a string that encodes all of the options used
+to produce the hash, so to verify passwords later, this string is all you need,
+as we'll see in the next section.
+
 ### Verifying a password
 
 
