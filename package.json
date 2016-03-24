@@ -2,7 +2,7 @@
   "name": "argon2.js",
   "version": "0.0.0",
   "description": "Node.js bindings for argon2 password hashing and proof-of-work algorithm",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --reporter spec",
