@@ -2,6 +2,7 @@ var assert = require('assert');
 var describe = require('mocha').describe;
 var it = require('mocha').it;
 var argon2i = require('../lib/index').argon2i;
+var argon2d = require('../lib/index').argon2d;
 
 describe('argon2i', function () {
   describe('hashRaw', function () {
@@ -96,6 +97,21 @@ describe('argon2i', function () {
         assert(err instanceof Error);
         assert.equal(res, null);
         assert.equal(err.message, 'ARGON2_VERIFY_MISMATCH');
+        done();
+      });
+    });
+  });
+});
+
+describe('argon2d', function () {
+  describe('hashRaw', function () {
+    it('should return correct hash', function (done) {
+      var salt = new Buffer('saltsalt');
+      var password = new Buffer('password1');
+      var expectedHash = '12d8487548a17c7856a26abf640fcdfd5ab0e4f57188292d2ef634299f43fc2f';
+      argon2d.hashRaw(password, salt, function (err, hashOutput) {
+        assert.ifError(err);
+        assert.equal(hashOutput.toString('hex'), expectedHash);
         done();
       });
     });

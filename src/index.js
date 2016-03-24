@@ -86,3 +86,6 @@ function variant(hashRaw, hashEncoded, verify) {
 export const argon2i = variant(argon2.argon2i_hash_raw,
                                argon2.argon2i_hash_encoded,
                                argon2.argon2i_verify);
+export const argon2d = variant(argon2.argon2d_hash_raw,
+                               argon2.argon2d_hash_encoded,
+                               argon2.argon2d_verify);
