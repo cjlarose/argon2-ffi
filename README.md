@@ -16,11 +16,28 @@ one you should use, refer to the [`argon2` repo][argon2].
 
 ```javascript
 var argon2i = require('argon2.js').argon2i;
+// var argon2d = require('argon2.js').argon2d; if you'd like to use argon2d
 
 var password = new Buffer('password1');
 var salt = new Buffer('saltysalt');
 argon2i.hash(password, salt, function(err, res) {
   console.log(res); // $argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8
+});
+```
+
+`.hash` takes a few options, too! You can specify `timeCost` (default `3`),
+`memoryCost` (default `12`, meaning 2<sup>12</sup> KiB), `parallelism` (default
+`1`), and `hashLength` (default `32`). Changing any of these parameters will
+have an effect on the output hash.
+
+```javascript
+var argon2i = require('argon2.js').argon2i;
+
+var password = new Buffer('password1');
+var salt = new Buffer('saltysalt');
+var options = { timeCost: 4, memoryCost: 14, parallelism: 2, hashLength: 64 };
+argon2i.hash(password, salt, options, function(err, res) {
+  console.log(res); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
 });
 ```
 
