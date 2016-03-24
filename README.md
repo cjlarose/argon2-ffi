@@ -1,11 +1,11 @@
-# argon2.js [![Build Status](https://travis-ci.org/cjlarose/argon2.js.svg?branch=master)](https://travis-ci.org/cjlarose/argon2.js)
+# argon2-ffi [![Build Status](https://travis-ci.org/cjlarose/argon2-ffi.svg?branch=master)](https://travis-ci.org/cjlarose/argon2-ffi)
 
 Node.js bindings for [`argon2`][argon2], the winner of the Password
 Hashing Competition (PHC), and the current recommendation for
 password storage by the [Open Web Application Security Project
 (OWASP)][owasp].
 
-`argon2.js` supports Node v4.0 and higher. Calling CPU-intensive tasks like
+`argon2-ffi` supports Node v4.0 and higher. Calling CPU-intensive tasks like
 password hashing and validation are performed asynchronously by dispatching the
 work to a separate thread pool using [`node-ffi`, which in turn uses
 `libuv`][async-library-calls], so your main application can continue to do
@@ -15,7 +15,7 @@ other work while these tasks are executed.
 
 ## Installation
 
-    npm install --save cjlarose/argon2.js
+    npm install --save cjlarose/argon2-ffi
 
 ## Usage
 
@@ -27,8 +27,8 @@ one you should use, refer to the [`argon2` repo][argon2].
 ### Hashing a password
 
 ```javascript
-var argon2i = require('argon2.js').argon2i;
-// var argon2d = require('argon2.js').argon2d; if you'd like to use argon2d
+var argon2i = require('argon2-ffi').argon2i;
+// var argon2d = require('argon2-ffi').argon2d; if you'd like to use argon2d
 
 var password = new Buffer('password1');
 var salt = new Buffer('saltysalt');
@@ -43,7 +43,7 @@ argon2i.hash(password, salt, function(err, res) {
 have an effect on the output hash.
 
 ```javascript
-var argon2i = require('argon2.js').argon2i;
+var argon2i = require('argon2-ffi').argon2i;
 
 var password = new Buffer('password1');
 var salt = new Buffer('saltysalt');
@@ -61,7 +61,7 @@ as we'll see in the next section.
 
 
 ```javascript
-var argon2i = require('argon2.js').argon2i;
+var argon2i = require('argon2-ffi').argon2i;
 
 var encodedHash = "$argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8";
 var password = new Buffer('password1');
