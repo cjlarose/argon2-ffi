@@ -5,6 +5,8 @@ Hashing Competition (PHC), and the current recommendation for
 password storage by the [Open Web Application Security Project
 (OWASP)][owasp].
 
+`argon2.js` supports Node v4.0 and higher.
+
 ## Installation
 
     npm install --save cjlarose/argon2.js
