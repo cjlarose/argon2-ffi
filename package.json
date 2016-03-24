@@ -1,14 +1,14 @@
 {
   "name": "argon2.js",
   "version": "0.0.0",
-  "description": "",
+  "description": "Node.js bindings for argon2 password hashing and proof-of-work algorithm",
   "main": "src/index.js",
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --reporter spec",
     "build": "babel src -d lib"
   },
-  "author": "",
+  "author": "Chris LaRose",
   "license": "ISC",
   "dependencies": {
     "enum": "^2.3.0",
