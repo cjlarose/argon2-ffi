@@ -6,7 +6,8 @@
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --reporter spec",
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "prepublish": "npm run build"
   },
   "author": "Chris LaRose",
   "license": "ISC",
