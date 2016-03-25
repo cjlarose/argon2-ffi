@@ -70,7 +70,7 @@ function variant(hashRaw, hashEncoded, verify) {
     },
 
     verify(encoded, password, cb) {
-      const encodedBuffer = ref.allocCString(encoded);
+      const encodedBuffer = ref.allocCString(encoded || '');
       verify.async(encodedBuffer, password, password.length, (err, res) => {
         if (err) { return cb(err, null); }
         if (!errorCodes.ARGON2_OK.is(res)) {

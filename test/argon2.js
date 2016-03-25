@@ -100,6 +100,17 @@ describe('argon2i', function () {
         done();
       });
     });
+
+    it('should reject undefined hash', function (done) {
+      var password = new Buffer('password10');
+
+      argon2i.verify(undefined, password, function (err, res) {
+        assert(err instanceof Error);
+        assert.equal(res, null);
+        assert.equal(err.message, 'ARGON2_DECODING_FAIL');
+        done();
+      });
+    });
   });
 });
 
