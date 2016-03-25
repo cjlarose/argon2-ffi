@@ -4,7 +4,7 @@ import errorCodes from './error_codes';
 
 const defaultOptions = {
   timeCost: 3,
-  memoryCost: 12,
+  memoryCost: 1 << 12,
   parallelism: 1,
   hashLength: 32,
 };
@@ -39,7 +39,7 @@ function variant(hashRaw, hashEncoded, verify) {
         }
         return cb(null, hashOutput);
       };
-      hashRaw.async(timeCost, 1 << memoryCost, parallelism,
+      hashRaw.async(timeCost, memoryCost, parallelism,
                     password, password.length,
                     salt, salt.length,
                     hashOutput, hashLength,
@@ -50,7 +50,7 @@ function variant(hashRaw, hashEncoded, verify) {
     hash(...args) {
       const [password, salt, options, cb] = parseArgs(args);
       const { timeCost, memoryCost, parallelism, hashLength } = options;
-      const encodedSize = argon2.argon2_encodedlen(timeCost, 1 << memoryCost, parallelism,
+      const encodedSize = argon2.argon2_encodedlen(timeCost, memoryCost, parallelism,
                                                    salt.length, hashLength);
       const outputBuffer = new Buffer(encodedSize);
       const resultHandler = (err, res) => {
@@ -61,7 +61,7 @@ function variant(hashRaw, hashEncoded, verify) {
         }
         return cb(null, ref.readCString(outputBuffer, 0));
       };
-      hashEncoded.async(timeCost, 1 << memoryCost, parallelism,
+      hashEncoded.async(timeCost, memoryCost, parallelism,
                         password, password.length,
                         salt, salt.length,
                         hashLength,

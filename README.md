@@ -38,7 +38,7 @@ argon2i.hash(password, salt, function(err, res) {
 ```
 
 `.hash` takes a few options, too! You can specify `timeCost` (default `3`),
-`memoryCost` (default `12`, meaning 2<sup>12</sup> KiB), `parallelism` (default
+`memoryCost` (default `4096`), `parallelism` (default
 `1`), and `hashLength` (default `32`). Changing any of these parameters will
 have an effect on the output hash.
 
@@ -47,7 +47,7 @@ var argon2i = require('argon2-ffi').argon2i;
 
 var password = new Buffer('password1');
 var salt = new Buffer('saltysalt');
-var options = { timeCost: 4, memoryCost: 14, parallelism: 2, hashLength: 64 };
+var options = { timeCost: 4, memoryCost: 1 << 14, parallelism: 2, hashLength: 64 };
 argon2i.hash(password, salt, options, function(err, res) {
   console.log(res); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
 });
