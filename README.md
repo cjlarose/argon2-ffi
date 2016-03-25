@@ -15,7 +15,7 @@ other work while these tasks are executed.
 
 ## Installation
 
-    npm install --save cjlarose/argon2-ffi
+    npm install --save argon2-ffi
 
 ## Usage
 
