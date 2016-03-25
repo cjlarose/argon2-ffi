@@ -9,6 +9,10 @@
     "build": "babel src -d lib",
     "prepublish": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cjlarose/argon2-ffi.git"
+  },
   "author": "Chris LaRose",
   "license": "ISC",
   "dependencies": {
