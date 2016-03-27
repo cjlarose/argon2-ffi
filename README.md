@@ -78,6 +78,8 @@ argon2i.verify(encodedHash, password, function(err, res) {
 
 To build:
 
+    git submodule init
+    git submodule update
     npm install -g node-gyp
     node-gyp rebuild
     npm run build
