@@ -62,6 +62,17 @@ describe('argon2i', function () {
         done();
       });
     });
+
+    it('should allow password input of type string', function (done) {
+      var salt = new Buffer('saltsalt');
+      var password = 'password1';
+      var expectedHash = '5179f7706253f090137b74004f16355341405aa657ac3ed1e9b5301326778444';
+      argon2i.hashRaw(password, salt, function (err, hashOutput) {
+        assert.ifError(err);
+        assert.equal(hashOutput.toString('hex'), expectedHash);
+        done();
+      });
+    });
   });
 
   describe('hash', function () {
@@ -76,11 +87,33 @@ describe('argon2i', function () {
         done();
       });
     });
+
+    it('should allow password input of type string', function (done) {
+      var salt = new Buffer('saltsalt');
+      var password = 'password1';
+      var expectedHash = '$argon2i$v=19$m=4096,t=3,p=1' +
+        '$c2FsdHNhbHQ$UXn3cGJT8JATe3QATxY1U0FAWqZXrD7R6bUwEyZ3hEQ';
+      argon2i.hash(password, salt, function (err, hashOutput) {
+        assert.ifError(err);
+        assert.equal(hashOutput.toString('hex'), expectedHash);
+        done();
+      });
+    });
   });
 
   describe('verify', function () {
     it('should verify password', function (done) {
       var password = new Buffer('password1');
+      var encodedHash = '$argon2i$v=19$m=4096,t=3,p=1' +
+        '$c2FsdHNhbHQ$UXn3cGJT8JATe3QATxY1U0FAWqZXrD7R6bUwEyZ3hEQ';
+      argon2i.verify(encodedHash, password, function (err) {
+        assert.ifError(err);
+        done();
+      });
+    });
+
+    it('should allow password input of type string', function (done) {
+      var password = 'password1';
       var encodedHash = '$argon2i$v=19$m=4096,t=3,p=1' +
         '$c2FsdHNhbHQ$UXn3cGJT8JATe3QATxY1U0FAWqZXrD7R6bUwEyZ3hEQ';
       argon2i.verify(encodedHash, password, function (err) {
@@ -125,6 +158,17 @@ describe('argon2d', function () {
         assert.equal(hashOutput.toString('hex'), expectedHash);
         done();
       });
+    });
+  });
+
+  it('should allow password input of type string', function (done) {
+    var salt = new Buffer('saltsalt');
+    var password = 'password1';
+    var expectedHash = '12d8487548a17c7856a26abf640fcdfd5ab0e4f57188292d2ef634299f43fc2f';
+    argon2d.hashRaw(password, salt, function (err, hashOutput) {
+      assert.ifError(err);
+      assert.equal(hashOutput.toString('hex'), expectedHash);
+      done();
     });
   });
 });
