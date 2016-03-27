@@ -29,6 +29,8 @@ function variant(hashRaw, hashEncoded, verify) {
   return {
     hashRaw(...args) {
       const [password, salt, options, cb] = parseArgs(args);
+      let parsedPassword = password;
+      if (typeof password === 'string') { parsedPassword = new Buffer(password); }
       const { timeCost, memoryCost, parallelism, hashLength } = options;
       const hashOutput = new Buffer(hashLength);
       const resultHandler = (err, res) => {
@@ -40,7 +42,7 @@ function variant(hashRaw, hashEncoded, verify) {
         return cb(null, hashOutput);
       };
       hashRaw.async(timeCost, memoryCost, parallelism,
-                    password, password.length,
+                    parsedPassword, parsedPassword.length,
                     salt, salt.length,
                     hashOutput, hashLength,
                     resultHandler);
@@ -49,6 +51,8 @@ function variant(hashRaw, hashEncoded, verify) {
 
     hash(...args) {
       const [password, salt, options, cb] = parseArgs(args);
+      let parsedPassword = password;
+      if (typeof password === 'string') { parsedPassword = new Buffer(password); }
       const { timeCost, memoryCost, parallelism, hashLength } = options;
       const encodedSize = argon2.argon2_encodedlen(timeCost, memoryCost, parallelism,
                                                    salt.length, hashLength);
@@ -62,7 +66,7 @@ function variant(hashRaw, hashEncoded, verify) {
         return cb(null, ref.readCString(outputBuffer, 0));
       };
       hashEncoded.async(timeCost, memoryCost, parallelism,
-                        password, password.length,
+                        parsedPassword, parsedPassword.length,
                         salt, salt.length,
                         hashLength,
                         outputBuffer, outputBuffer.length,
@@ -71,7 +75,9 @@ function variant(hashRaw, hashEncoded, verify) {
 
     verify(encoded, password, cb) {
       const encodedBuffer = ref.allocCString(encoded || '');
-      verify.async(encodedBuffer, password, password.length, (err, res) => {
+      let parsedPassword = password;
+      if (typeof password === 'string') { parsedPassword = new Buffer(password); }
+      verify.async(encodedBuffer, parsedPassword, parsedPassword.length, (err, res) => {
         if (err) { return cb(err, null); }
         if (!errorCodes.ARGON2_OK.is(res)) {
           const errorMsg = errorCodes.get(res).key;
