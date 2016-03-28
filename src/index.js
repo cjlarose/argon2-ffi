@@ -1,6 +1,8 @@
 import ref from 'ref';
 import argon2 from './library';
-import errorCodes from './error_codes';
+
+const { argon2_error_message: argon2ErrorMessage } = argon2;
+const ARGON2_OK = 0;
 
 const defaultOptions = {
   timeCost: 3,
@@ -36,9 +38,8 @@ function variant(hashRaw, hashEncoded, verify) {
       const hashOutput = new Buffer(hashLength);
       const resultHandler = (err, res) => {
         if (err) { return cb(err, null); }
-        if (!errorCodes.ARGON2_OK.is(res)) {
-          const errorMsg = errorCodes.get(res).key;
-          return cb(new Error(errorMsg), null);
+        if (res !== ARGON2_OK) {
+          return cb(new Error(argon2ErrorMessage(res)), null);
         }
         return cb(null, hashOutput);
       };
@@ -58,9 +59,8 @@ function variant(hashRaw, hashEncoded, verify) {
       const outputBuffer = new Buffer(encodedSize);
       const resultHandler = (err, res) => {
         if (err) { return cb(err, null); }
-        if (!errorCodes.ARGON2_OK.is(res)) {
-          const errorMsg = errorCodes.get(res).key;
-          return cb(new Error(errorMsg), null);
+        if (res !== ARGON2_OK) {
+          return cb(new Error(argon2ErrorMessage(res)), null);
         }
         return cb(null, ref.readCString(outputBuffer, 0));
       };
@@ -78,9 +78,8 @@ function variant(hashRaw, hashEncoded, verify) {
       if (typeof password === 'string') { parsedPassword = new Buffer(password); }
       verify.async(encodedBuffer, parsedPassword, parsedPassword.length, (err, res) => {
         if (err) { return cb(err, null); }
-        if (!errorCodes.ARGON2_OK.is(res)) {
-          const errorMsg = errorCodes.get(res).key;
-          return cb(new Error(errorMsg), null);
+        if (res !== ARGON2_OK) {
+          return cb(new Error(argon2ErrorMessage(res)), null);
         }
         return cb(null, res);
       });

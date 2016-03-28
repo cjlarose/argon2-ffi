@@ -58,7 +58,7 @@ describe('argon2i', function () {
       argon2i.hashRaw(password, salt, options, function (err, hashOutput) {
         assert(err instanceof Error);
         assert.equal(hashOutput, null);
-        assert.equal(err.message, 'ARGON2_MEMORY_TOO_LITTLE');
+        assert.equal(err.message, 'Memory cost is too small');
         done();
       });
     });
@@ -129,7 +129,7 @@ describe('argon2i', function () {
       argon2i.verify(encodedHash, password, function (err, res) {
         assert(err instanceof Error);
         assert.equal(res, null);
-        assert.equal(err.message, 'ARGON2_VERIFY_MISMATCH');
+        assert.equal(err.message, 'The password does not match the supplied hash');
         done();
       });
     });
@@ -140,7 +140,7 @@ describe('argon2i', function () {
       argon2i.verify(undefined, password, function (err, res) {
         assert(err instanceof Error);
         assert.equal(res, null);
-        assert.equal(err.message, 'ARGON2_DECODING_FAIL');
+        assert.equal(err.message, 'Decoding failed');
         done();
       });
     });
