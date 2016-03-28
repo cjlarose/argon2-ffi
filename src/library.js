@@ -36,4 +36,6 @@ export default new ffi.Library(dylib, {
 
   argon2_encodedlen: ['size_t', ['uint32', 'uint32', 'uint32', // t_cost, m_cost, p
                                  'uint32', 'uint32']],         // salt length, hash length
+
+  argon2_error_message: ['string', ['int']], // error_code
 });

@@ -16,7 +16,6 @@
   "author": "Chris LaRose",
   "license": "ISC",
   "dependencies": {
-    "enum": "^2.3.0",
     "ffi": "^2.0.0",
     "ref": "^1.3.2"
   },
