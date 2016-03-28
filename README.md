@@ -74,6 +74,17 @@ argon2i.verify(encodedHash, password, function(err, res) {
 });
 ```
 
+### Promises
+
+You can use `argon2-ffi` with promises by promisifying the functions with libraries like [bluebird](https://github.com/petkaantonov/bluebird):
+
+```javascript
+var Promise = require('bluebird');
+var argon2i = require('argon2-ffi').argon2i;
+Promise.promisifyAll(argon2i.prototype);
+Promise.promisifyAll(argon2i.prototype);
+```
+
 ## Contributing
 
 To build:
