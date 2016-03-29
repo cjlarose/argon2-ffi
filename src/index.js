@@ -1,7 +1,15 @@
 import ref from 'ref';
-import argon2 from './library';
+import {
+  argon2ErrorMessage,
+  argon2Encodedlen,
+  argon2iHashEncoded,
+  argon2iHashRaw,
+  argon2dHashEncoded,
+  argon2dHashRaw,
+  argon2iVerify,
+  argon2dVerify,
+} from './library';
 
-const { argon2_error_message: argon2ErrorMessage } = argon2;
 const ARGON2_OK = 0;
 
 const defaultOptions = {
@@ -54,7 +62,7 @@ function variant(hashRaw, hashEncoded, verify) {
     hash(...args) {
       const [password, salt, options, cb] = parseArgs(args);
       const { timeCost, memoryCost, parallelism, hashLength } = options;
-      const encodedSize = argon2.argon2_encodedlen(timeCost, memoryCost, parallelism,
+      const encodedSize = argon2Encodedlen(timeCost, memoryCost, parallelism,
                                                    salt.length, hashLength);
       const outputBuffer = new Buffer(encodedSize);
       const resultHandler = (err, res) => {
@@ -87,9 +95,9 @@ function variant(hashRaw, hashEncoded, verify) {
   };
 }
 
-export const argon2i = variant(argon2.argon2i_hash_raw,
-                               argon2.argon2i_hash_encoded,
-                               argon2.argon2i_verify);
-export const argon2d = variant(argon2.argon2d_hash_raw,
-                               argon2.argon2d_hash_encoded,
-                               argon2.argon2d_verify);
+export const argon2i = variant(argon2iHashRaw,
+                               argon2iHashEncoded,
+                               argon2iVerify);
+export const argon2d = variant(argon2dHashRaw,
+                               argon2dHashEncoded,
+                               argon2dVerify);
