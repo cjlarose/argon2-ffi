@@ -3,7 +3,7 @@ import ref from 'ref';
 import path from 'path';
 
 const dylib = path.join(__dirname, '..', 'build', 'Release', 'argon2');
-export default new ffi.Library(dylib, {
+const lib = new ffi.Library(dylib, {
   argon2i_hash_encoded: ['int', ['uint32', 'uint32', 'uint32',    // t_cost, m_cost, p
                                  ref.refType('void'), 'size_t',   // password
                                  ref.refType('void'), 'size_t',   // salt
@@ -39,3 +39,25 @@ export default new ffi.Library(dylib, {
 
   argon2_error_message: ['string', ['int']], // error_code
 });
+
+const {
+  argon2_error_message: argon2ErrorMessage,
+  argon2_encodedlen: argon2Encodedlen,
+  argon2i_hash_encoded: argon2iHashEncoded,
+  argon2i_hash_raw: argon2iHashRaw,
+  argon2d_hash_encoded: argon2dHashEncoded,
+  argon2d_hash_raw: argon2dHashRaw,
+  argon2i_verify: argon2iVerify,
+  argon2d_verify: argon2dVerify,
+} = lib;
+
+export {
+  argon2ErrorMessage,
+  argon2Encodedlen,
+  argon2iHashEncoded,
+  argon2iHashRaw,
+  argon2dHashEncoded,
+  argon2dHashRaw,
+  argon2iVerify,
+  argon2dVerify,
+};
