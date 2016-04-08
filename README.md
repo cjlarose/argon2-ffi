@@ -35,7 +35,7 @@ var Promise = require('bluebird');
 var randomBytes = Promise.promisify(crypto.randomBytes);
 
 var password = 'password1'; // Can also be a Buffer
-crypto.randomBytes(32).then(salt => argon2i.hash(password, salt))
+randomBytes(32).then(salt => argon2i.hash(password, salt))
   .then(console.log); // $argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8
 ```
 
@@ -57,7 +57,7 @@ var randomBytes = Promise.promisify(crypto.randomBytes);
 
 var password = new Buffer('password1');
 var options = { timeCost: 4, memoryCost: 1 << 14, parallelism: 2, hashLength: 64 };
-crypto.randomBytes(32).then(salt => argon2i.hash(password, salt, options))
+randomBytes(32).then(salt => argon2i.hash(password, salt, options))
   .then(console.log); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
 ```
 
