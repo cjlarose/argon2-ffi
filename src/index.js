@@ -10,7 +10,10 @@ import {
   argon2dVerify,
 } from './library';
 
+import Promise from 'any-promise';
+
 const ARGON2_OK = 0;
+const ARGON2_VERIFY_MISMATCH = -35;
 
 const defaultOptions = {
   timeCost: 3,
@@ -19,78 +22,78 @@ const defaultOptions = {
   hashLength: 32,
 };
 
-function parseArgs(args) {
-  let password;
-  let salt;
-  let options = {};
-  let cb;
+function parseArgs([password, salt, options = {}]) {
+  if (typeof password === 'string') { password = new Buffer(password); }
+  options = Object.assign({}, defaultOptions, options);
 
-  if (args.length === 3) {
-    [password, salt, cb] = args;
-  } else {
-    [password, salt, options, cb] = args;
-  }
-
-  let parsedPassword = password;
-  if (typeof password === 'string') { parsedPassword = new Buffer(password); }
-
-  const hashOptions = Object.assign({}, defaultOptions, options);
-  return [parsedPassword, salt, hashOptions, cb];
+  return [password, salt, options];
 }
 
 function variant(hashRaw, hashEncoded, verify) {
   return {
     hashRaw(...args) {
-      const [password, salt, options, cb] = parseArgs(args);
+      const [password, salt, options] = parseArgs(args);
       const { timeCost, memoryCost, parallelism, hashLength } = options;
       const hashOutput = new Buffer(hashLength);
-      const resultHandler = (err, res) => {
-        if (err) { return cb(err, null); }
-        if (res !== ARGON2_OK) {
-          return cb(new Error(argon2ErrorMessage(res)), null);
-        }
-        return cb(null, hashOutput);
-      };
-      hashRaw.async(timeCost, memoryCost, parallelism,
-                    password, password.length,
-                    salt, salt.length,
-                    hashOutput, hashLength,
-                    resultHandler);
-      return hashOutput;
+      const promise = new Promise((resolve, reject) => {
+        const resultHandler = (err, res) => {
+          if (err) { return reject(err); }
+          if (res !== ARGON2_OK) {
+            return reject(new Error(argon2ErrorMessage(res)));
+          }
+          return resolve(hashOutput);
+        };
+        hashRaw.async(timeCost, memoryCost, parallelism,
+                      password, password.length,
+                      salt, salt.length,
+                      hashOutput, hashLength,
+                      resultHandler);
+      });
+      return promise;
     },
 
     hash(...args) {
-      const [password, salt, options, cb] = parseArgs(args);
+      const [password, salt, options] = parseArgs(args);
       const { timeCost, memoryCost, parallelism, hashLength } = options;
       const encodedSize = argon2Encodedlen(timeCost, memoryCost, parallelism,
                                                    salt.length, hashLength);
       const outputBuffer = new Buffer(encodedSize);
-      const resultHandler = (err, res) => {
-        if (err) { return cb(err, null); }
-        if (res !== ARGON2_OK) {
-          return cb(new Error(argon2ErrorMessage(res)), null);
-        }
-        return cb(null, ref.readCString(outputBuffer, 0));
-      };
-      hashEncoded.async(timeCost, memoryCost, parallelism,
-                        password, password.length,
-                        salt, salt.length,
-                        hashLength,
-                        outputBuffer, outputBuffer.length,
-                        resultHandler);
+      const promise = new Promise((resolve, reject) => {
+        const resultHandler = (err, res) => {
+          if (err) { return reject(err); }
+          if (res !== ARGON2_OK) {
+            return reject(new Error(argon2ErrorMessage(res)));
+          }
+          return resolve(ref.readCString(outputBuffer, 0));
+        };
+        hashEncoded.async(timeCost, memoryCost, parallelism,
+                          password, password.length,
+                          salt, salt.length,
+                          hashLength,
+                          outputBuffer, outputBuffer.length,
+                          resultHandler);
+      });
+      return promise;
     },
 
-    verify(encoded, password, cb) {
+    verify(encoded, password) {
       const encodedBuffer = ref.allocCString(encoded || '');
       let parsedPassword = password;
       if (typeof password === 'string') { parsedPassword = new Buffer(password); }
-      verify.async(encodedBuffer, parsedPassword, parsedPassword.length, (err, res) => {
-        if (err) { return cb(err, null); }
-        if (res !== ARGON2_OK) {
-          return cb(new Error(argon2ErrorMessage(res)), null);
-        }
-        return cb(null, res);
+      const promise = new Promise((resolve, reject) => {
+        const resultHandler = (err, res) => {
+          if (err) { return reject(err); }
+          if (res === ARGON2_OK) {
+            return resolve(true);
+          } else if (res === ARGON2_VERIFY_MISMATCH) {
+            return resolve(false);
+          } else {
+            return reject(new Error(argon2ErrorMessage(res)));
+          }
+        };
+        verify.async(encodedBuffer, parsedPassword, parsedPassword.length, resultHandler);
       });
+      return promise;
     },
   };
 }
