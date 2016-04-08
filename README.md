@@ -27,15 +27,23 @@ one you should use, refer to the [`argon2` repo][argon2].
 ### Hashing a password
 
 ```javascript
+var crypto = require('crypto');
 var argon2i = require('argon2-ffi').argon2i;
 // var argon2d = require('argon2-ffi').argon2d; if you'd like to use argon2d
 
 var password = new Buffer('password1');
-var salt = new Buffer('saltysalt');
-argon2i.hash(password, salt, function(err, res) {
-  console.log(res); // $argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8
+crypto.randomBytes(128, function (err, salt) {
+  argon2i.hash(password, salt, function(err, res) {
+    console.log(res); // $argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8
+  });
 });
 ```
+
+In this example,
+[crypto.randomBytes](https://nodejs.org/api/crypto.html#crypto_crypto_randombytes_size_callback)
+is used to generate a salt.
+This is the best practice as the salt is guaranteed to be cryptographically secure.
+However, you can of course use your own buffer.
 
 `.hash` takes a few options, too! You can specify `timeCost` (default `3`),
 `memoryCost` (default `4096`), `parallelism` (default
@@ -43,13 +51,15 @@ argon2i.hash(password, salt, function(err, res) {
 have an effect on the output hash.
 
 ```javascript
+var crypto = require('crypto');
 var argon2i = require('argon2-ffi').argon2i;
 
-var password = new Buffer('password1');
-var salt = new Buffer('saltysalt');
 var options = { timeCost: 4, memoryCost: 1 << 14, parallelism: 2, hashLength: 64 };
-argon2i.hash(password, salt, options, function(err, res) {
-  console.log(res); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
+var password = new Buffer('password1');
+crypto.randomBytes(128, function (err, salt) {
+  argon2i.hash(password, salt, options, function(err, res) {
+    console.log(res); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
+  });
 });
 ```
 
