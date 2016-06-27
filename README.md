@@ -76,6 +76,20 @@ argon2i.verify(encodedHash, password)
   .then(correct => console.log(correct ? 'Correct password!' : 'Incorrect password'));
 ```
 
+### Differences from node-argon2
+
+`argon2-ffi` was originally written to address [an issue][node-argon2-issue]
+with running [`node-argon2`][node-argon2] in a web server. This was a
+non-starter for my own projects. By using `node-ffi`, `argon2-ffi` was able to
+circumvent the problems `node-argon2` had with Promises. `node-argon2` has
+since resolved this issue.  `argon2-ffi` also returned Promises with
+`any-promise`, but this has since been implemented in `node-argon2` as well.
+Today, the practical differences between the two libraries are only in the
+public APIs.
+
+[node-argon2-issue]: https://github.com/ranisalt/node-argon2/issues/33
+[node-argon2]: https://github.com/ranisalt/node-argon2
+
 ## Contributing
 
 To build:
