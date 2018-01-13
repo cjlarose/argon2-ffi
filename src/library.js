@@ -1,5 +1,5 @@
-import ffi from 'ffi';
-import ref from 'ref';
+import ffi from 'ffi-napi';
+import ref from 'ref-napi';
 import path from 'path';
 
 const dylib = path.join(__dirname, '..', 'build', 'Release', 'argon2');

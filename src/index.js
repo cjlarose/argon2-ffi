@@ -1,4 +1,4 @@
-import ref from 'ref';
+import ref from 'ref-napi';
 import {
   argon2ErrorMessage,
   argon2Encodedlen,
