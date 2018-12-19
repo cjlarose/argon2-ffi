@@ -5,7 +5,7 @@ import fs from 'fs';
 
 function loadLib(filename, fallback) {
   try {
-    if (!fs.existsSync(filename)) {
+    if (!fs.existsSync(`${filename}.so`)) {
       throw new Error('Missing default target');
     }
     return filename;
