@@ -1,10 +1,13 @@
 import ffi from 'ffi-napi';
 import ref from 'ref-napi';
 import path from 'path';
+import fs from 'fs';
 
 function loadLib(filename, fallback) {
   try {
-    require(filename);
+    if (!fs.existsSync(filename)) {
+      throw new Error('Missing default target');
+    }
     return filename;
   } catch (e) {
     return fallback;
