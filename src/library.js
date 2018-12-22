@@ -1,22 +1,8 @@
 import ffi from 'ffi-napi';
 import ref from 'ref-napi';
 import path from 'path';
-import fs from 'fs';
 
-function loadLib(filename, fallback) {
-  try {
-    if (!fs.existsSync(`${filename}.so`)) {
-      throw new Error('Missing default target');
-    }
-    return filename;
-  } catch (e) {
-    return fallback;
-  }
-}
-
-const defaultTarget = path.join(__dirname, '..', 'build', 'Release', 'argon2');
-const linuxTarget = path.join(__dirname, '..', 'build', 'Release', 'lib.target', 'argon2');
-const dylib = loadLib(defaultTarget, linuxTarget);
+const dylib = path.join(__dirname, '..', 'build', 'Release', 'ojb.target', 'argon2');
 const lib = new ffi.Library(dylib, {
   argon2i_hash_encoded: ['int', ['uint32', 'uint32', 'uint32',    // t_cost, m_cost, p
                                  ref.refType('void'), 'size_t',   // password
