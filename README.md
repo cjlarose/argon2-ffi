@@ -5,12 +5,13 @@ Hashing Competition (PHC), and the current recommendation for
 password storage by the [Open Web Application Security Project
 (OWASP)][owasp].
 
-`argon2-ffi` supports Node v4.0 and higher. Calling CPU-intensive tasks like
-password hashing and validation are performed asynchronously by dispatching the
-work to a separate thread pool using [`node-ffi`, which in turn uses
-`libuv`][async-library-calls], so your main application can continue to do
-other work while these tasks are executed. All asynchronous operations return
-Promises, with a type defined by [any-promise](https://www.npmjs.com/package/any-promise).
+`argon2-ffi` supports NodeJS LTS releases and the current NodeJS release.
+Calling CPU-intensive tasks like password hashing and validation are performed
+asynchronously by dispatching the work to a separate thread pool using
+[`node-ffi`, which in turn uses `libuv`][async-library-calls], so your main
+application can continue to do other work while these tasks are executed. All
+asynchronous operations return Promises, with a type defined by
+[any-promise](https://www.npmjs.com/package/any-promise).
 
 [async-library-calls]: https://github.com/node-ffi/node-ffi/wiki/Node-FFI-Tutorial#async-library-calls
 
