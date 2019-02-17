@@ -1,6 +1,6 @@
 {
   "name": "argon2-ffi",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Node.js bindings for argon2 password hashing and proof-of-work algorithm",
   "main": "lib/index.js",
   "scripts": {
