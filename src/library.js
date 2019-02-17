@@ -1,9 +1,30 @@
 import ffi from 'ffi-napi';
 import ref from 'ref-napi';
 import path from 'path';
+import fs from 'fs';
 
-const dylib = path.join(__dirname, '..', 'build', 'Release', 'obj.target', 'argon2');
-const lib = new ffi.Library(dylib, {
+const RELEASE_DIR = path.join(__dirname, '..', 'build', 'Release');
+const LIBRARY_SEARCH_PATHS = [
+  path.join(RELEASE_DIR, 'argon2'),
+  path.join(RELEASE_DIR, 'obj.target', 'argon2'),
+];
+
+function getLibraryPath() {
+  const expectedExtensions = ['so', 'dylib', 'dll'];
+
+  for (const searchPath of LIBRARY_SEARCH_PATHS) {
+    for (const extension of expectedExtensions) {
+      const libraryPath = `${searchPath}.${extension}`;
+      if (fs.existsSync(libraryPath) && fs.lstatSync(libraryPath).isFile()) {
+        return libraryPath;
+      }
+    }
+  }
+
+  throw new Error('Could not find argon2 library');
+}
+
+const lib = new ffi.Library(getLibraryPath(), {
   argon2i_hash_encoded: ['int', ['uint32', 'uint32', 'uint32',    // t_cost, m_cost, p
                                  ref.refType('void'), 'size_t',   // password
                                  ref.refType('void'), 'size_t',   // salt
