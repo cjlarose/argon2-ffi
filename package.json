@@ -23,7 +23,6 @@
     "@types/node": "^13.13.0",
     "dtslint": "^3.4.1",
     "eslint": "^2.4.0",
-    "eslint-config-airbnb": "^6.1.0",
     "mocha": "^5.2.0",
     "node-gyp": "^3.3.1",
     "prettier": "^2.0.4"
