@@ -28,16 +28,21 @@ one you should use, refer to the [`argon2` repo][argon2].
 ### Hashing a password
 
 ```javascript
-var argon2i = require("argon2-ffi").argon2i;
-// var argon2d = require('argon2-ffi').argon2d; if you'd like to use argon2d
-var crypto = require("crypto");
-var Promise = require("bluebird");
-var randomBytes = Promise.promisify(crypto.randomBytes);
+const { argon2i } = require("argon2-ffi");
+// const argon2d = require('argon2-ffi').argon2d; if you'd like to use argon2d
+const crypto = require("crypto");
+const util = require("util");
 
-var password = "password1"; // Can also be a Buffer
-randomBytes(32)
-  .then((salt) => argon2i.hash(password, salt))
-  .then(console.log); // $argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8
+const getRandomBytes = util.promisify(crypto.randomBytes);
+
+async function main() {
+  const password = "password1"; // Can also be a Buffer
+  const salt = await getRandomBytes(32);
+  const hashedPassword = await argon2i.hash(password, salt);
+  console.log(hashedPassword);
+}
+
+main();
 ```
 
 In this example,
@@ -51,21 +56,26 @@ to be cryptographically secure. However, you can of course use your own buffer.
 have an effect on the output hash.
 
 ```javascript
-var argon2i = require("argon2-ffi").argon2i;
-var crypto = require("crypto");
-var Promise = require("bluebird");
-var randomBytes = Promise.promisify(crypto.randomBytes);
+const { argon2i } = require("argon2-ffi");
+const crypto = require("crypto");
+const util = require("util");
 
-var password = Buffer.from("password1");
-var options = {
-  timeCost: 4,
-  memoryCost: 1 << 14,
-  parallelism: 2,
-  hashLength: 64,
-};
-randomBytes(32)
-  .then((salt) => argon2i.hash(password, salt, options))
-  .then(console.log); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
+const getRandomBytes = util.promisify(crypto.randomBytes);
+
+async function main() {
+  const password = Buffer.from("password1");
+  const options = {
+    timeCost: 4,
+    memoryCost: 16384,
+    parallelism: 2,
+    hashLength: 64,
+  };
+  const salt = await getRandomBytes(32);
+  const hashedPassword = await argon2i.hash(password, salt, options);
+  console.log(hashedPassword);
+}
+
+main();
 ```
 
 The result of running `.hash` is a string that encodes all of the options used
@@ -75,16 +85,17 @@ as we'll see in the next section.
 ### Verifying a password
 
 ```javascript
-var argon2i = require("argon2-ffi").argon2i;
+const { argon2i } = require("argon2-ffi");
 
-var encodedHash =
-  "$argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8";
-var password = Buffer.from("password1");
-argon2i
-  .verify(encodedHash, password)
-  .then((correct) =>
-    console.log(correct ? "Correct password!" : "Incorrect password")
-  );
+async function main() {
+  const encodedHash =
+    "$argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8";
+  const password = Buffer.from("password1");
+  const isCorrect = await argon2i.verify(encodedHash, password);
+  console.log(isCorrect ? "Correct password!" : "Incorrect password");
+}
+
+main();
 ```
 
 ### Differences from node-argon2

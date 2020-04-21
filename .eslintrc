@@ -1,6 +1,17 @@
 {
-  "extends": "prettier",
+  "extends": ["airbnb-base", "prettier"],
+  "rules": {
+    "no-restricted-syntax": "off"
+  },
+  "overrides": [
+    {
+      "files": ["test/**/*.js"],
+      "rules": {
+        "func-names": "off"
+      }
+    }
+  ],
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 2018
   }
 }
