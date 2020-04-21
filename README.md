@@ -56,7 +56,7 @@ var crypto = require("crypto");
 var Promise = require("bluebird");
 var randomBytes = Promise.promisify(crypto.randomBytes);
 
-var password = new Buffer("password1");
+var password = Buffer.from("password1");
 var options = {
   timeCost: 4,
   memoryCost: 1 << 14,
@@ -79,7 +79,7 @@ var argon2i = require("argon2-ffi").argon2i;
 
 var encodedHash =
   "$argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8";
-var password = new Buffer("password1");
+var password = Buffer.from("password1");
 argon2i
   .verify(encodedHash, password)
   .then((correct) =>

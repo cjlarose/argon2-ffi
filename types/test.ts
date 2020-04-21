@@ -1,7 +1,7 @@
 import { argon2i, argon2d } from "argon2-ffi";
 
-const salt = new Buffer("saltsalt");
-const password = new Buffer("password1");
+const salt = Buffer.from("saltsalt");
+const password = Buffer.from("password1");
 const options = { memoryCost: 1 << 16, parallelism: 2 };
 const encodedHash =
   "$argon2i$v=19$m=4096,t=3,p=1" +
