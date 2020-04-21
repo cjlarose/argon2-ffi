@@ -14,6 +14,11 @@
   },
   "author": "Chris LaRose",
   "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "dependencies": {
     "any-promise": "^1.1.0",
     "ffi-napi": "^2.4.0",
