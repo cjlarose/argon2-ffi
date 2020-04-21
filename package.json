@@ -5,10 +5,7 @@
   "main": "lib/index.js",
   "types": "types",
   "scripts": {
-    "pretest": "npm run build",
     "test": "mocha --reporter spec",
-    "build": "babel src -d lib",
-    "prepublishOnly": "npm run build",
     "dtslint": "dtslint types"
   },
   "repository": {
