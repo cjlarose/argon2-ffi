@@ -25,18 +25,18 @@ This module exports `argon2i` and `argon2d`. These are two variants
 of `argon2` with different use-cases and tradeoffs. To find which
 one you should use, refer to the [`argon2` repo][argon2].
 
-
 ### Hashing a password
 
 ```javascript
-var argon2i = require('argon2-ffi').argon2i;
+var argon2i = require("argon2-ffi").argon2i;
 // var argon2d = require('argon2-ffi').argon2d; if you'd like to use argon2d
-var crypto = require('crypto');
-var Promise = require('bluebird');
+var crypto = require("crypto");
+var Promise = require("bluebird");
 var randomBytes = Promise.promisify(crypto.randomBytes);
 
-var password = 'password1'; // Can also be a Buffer
-randomBytes(32).then(salt => argon2i.hash(password, salt))
+var password = "password1"; // Can also be a Buffer
+randomBytes(32)
+  .then((salt) => argon2i.hash(password, salt))
   .then(console.log); // $argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8
 ```
 
@@ -51,14 +51,20 @@ to be cryptographically secure. However, you can of course use your own buffer.
 have an effect on the output hash.
 
 ```javascript
-var argon2i = require('argon2-ffi').argon2i;
-var crypto = require('crypto');
-var Promise = require('bluebird');
+var argon2i = require("argon2-ffi").argon2i;
+var crypto = require("crypto");
+var Promise = require("bluebird");
 var randomBytes = Promise.promisify(crypto.randomBytes);
 
-var password = new Buffer('password1');
-var options = { timeCost: 4, memoryCost: 1 << 14, parallelism: 2, hashLength: 64 };
-randomBytes(32).then(salt => argon2i.hash(password, salt, options))
+var password = new Buffer("password1");
+var options = {
+  timeCost: 4,
+  memoryCost: 1 << 14,
+  parallelism: 2,
+  hashLength: 64,
+};
+randomBytes(32)
+  .then((salt) => argon2i.hash(password, salt, options))
   .then(console.log); // $argon2i$v=19$m=16384,t=4,p=2$c2FsdHlzYWx0$gwJY/FsXNSR3aS1ChVTgDZ9HbF3V7sbbYE5UmQsdXFHB4Tt6/RVtFWGIIJnzZ62nL9miurrvJnxhvORK64ddFg
 ```
 
@@ -69,12 +75,16 @@ as we'll see in the next section.
 ### Verifying a password
 
 ```javascript
-var argon2i = require('argon2-ffi').argon2i;
+var argon2i = require("argon2-ffi").argon2i;
 
-var encodedHash = "$argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8";
-var password = new Buffer('password1');
-argon2i.verify(encodedHash, password)
-  .then(correct => console.log(correct ? 'Correct password!' : 'Incorrect password'));
+var encodedHash =
+  "$argon2i$v=19$m=4096,t=3,p=1$c2FsdHlzYWx0$oG0js25z7kM30xSg9+nAKtU0hrPa0UnvRnqQRZXHCV8";
+var password = new Buffer("password1");
+argon2i
+  .verify(encodedHash, password)
+  .then((correct) =>
+    console.log(correct ? "Correct password!" : "Incorrect password")
+  );
 ```
 
 ### Differences from node-argon2
@@ -83,7 +93,7 @@ argon2i.verify(encodedHash, password)
 with running [`node-argon2`][node-argon2] in a web server. This was a
 non-starter for my own projects. By using `node-ffi`, `argon2-ffi` was able to
 circumvent the problems `node-argon2` had with Promises. `node-argon2` has
-since resolved this issue.  `argon2-ffi` also returned Promises with
+since resolved this issue. `argon2-ffi` also returned Promises with
 `any-promise`, but this has since been implemented in `node-argon2` as well.
 Today, the practical differences between the two libraries are only in the
 public APIs.
