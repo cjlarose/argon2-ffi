@@ -98,7 +98,6 @@ To build:
     git submodule init
     git submodule update
     node-gyp rebuild
-    npm run build
 
 [argon2]: https://github.com/P-H-C/phc-winner-argon2
 [owasp]: https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet
