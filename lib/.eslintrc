@@ -1,3 +1,6 @@
 {
-  "extends": "airbnb/base"
+  "extends": "prettier",
+  "parserOptions": {
+    "ecmaVersion": 6
+  }
 }

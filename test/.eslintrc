@@ -1,6 +1,6 @@
 {
-  "extends": "airbnb/legacy",
-  "rules": {
-    "func-names": 0,
+  "extends": "prettier",
+  "parserOptions": {
+    "ecmaVersion": 6
   }
 }
