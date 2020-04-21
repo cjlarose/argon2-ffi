@@ -59,7 +59,7 @@ var randomBytes = Promise.promisify(crypto.randomBytes);
 var password = Buffer.from("password1");
 var options = {
   timeCost: 4,
-  memoryCost: 1 << 14,
+  memoryCost: 16384,
   parallelism: 2,
   hashLength: 64,
 };
