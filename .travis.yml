@@ -10,3 +10,17 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+jobs:
+  include:
+    - stage: lint
+      name: "prettier"
+      node_js: "12"
+      script: npm run prettier-check
+    - stage: lint
+      name: "eslint"
+      node_js: "12"
+      script: npm run lint
+    - stage: lint
+      name: "dtslint"
+      node_js: "12"
+      script: npm run dtslint

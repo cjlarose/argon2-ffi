@@ -6,6 +6,8 @@
   "types": "types",
   "scripts": {
     "test": "mocha --reporter spec",
+    "prettier-check": "prettier --check lib test",
+    "lint": "eslint .",
     "dtslint": "dtslint types"
   },
   "repository": {
